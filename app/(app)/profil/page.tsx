@@ -2,21 +2,18 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { calcAll } from "@/lib/calculations";
-import Button from "@/components/UI/Button";
-import Input from "@/components/UI/Input";
-import Card from "@/components/UI/Card";
 import Link from "next/link";
 
 export default function ProfilPage(){
   const [p,setP]=useState<any>(null); const [loading,setLoading]=useState(true); const [saving,setSaving]=useState(false); const [msg,setMsg]=useState("");
-  const [form,setForm]=useState({nama:"",usia:20,gender:"pria",bb:60,tb:170,tujuan:"stabilkan"});
-  useEffect(()=>{ (async()=>{
+  const [form,setForm]=useState({nama:"",usia:25,gender:"pria",bb:60,tb:165,tujuan:"stabilkan"});
+  useEffect(()=>{(async()=>{
     const s=createClient(); const {data:{user}}=await s.auth.getUser(); if(!user){location.href="/login";return;}
     const {data,error}=await s.from("profiles").select("*").eq("id",user.id).single();
     if(error){ setMsg(error.message); setLoading(false); return; }
     if(data){ setP(data); setForm({nama:data.nama,usia:data.usia,gender:data.gender,bb:data.bb,tb:data.tb,tujuan:data.tujuan});}
     setLoading(false);
-  })(); },[]);
+  })();},[]);
   async function save(e:React.FormEvent){
     e.preventDefault(); setSaving(true); setMsg("");
     const s=createClient(); const {data:{user}}=await s.auth.getUser();
@@ -26,36 +23,48 @@ export default function ProfilPage(){
     setSaving(false);
   }
   async function logout(){ const s=createClient(); await s.auth.signOut(); location.href="/login"; }
-  if(loading) return <div className="mx-auto max-w-[480px] p-6 text-sm font-black">Memuat...</div>;
-  if(!p) return <div className="mx-auto max-w-[480px] p-4"><Card>Tidak ada profil. {msg && <span className="text-xs">{msg}</span>}</Card></div>;
-  return <div className="mx-auto max-w-[480px] md:max-w-3xl p-4 space-y-4">
+  if(loading) return <div className="mx-auto max-w-5xl p-6 font-black">Memuat...</div>;
+  if(!p) return <div className="mx-auto max-w-5xl p-4"><div className="neo-card p-6">Tidak ada profil. {msg}</div></div>;
+  return <div className="mx-auto max-w-5xl p-4 pb-28 space-y-4">
     <div className="flex items-center justify-between gap-3">
-      <h1 className="text-2xl font-black uppercase tracking-tight">Profil</h1>
-      <button onClick={logout} className="rounded-[9999px] border-[3px] border-[#0f172a] bg-white px-4 py-2 text-xs font-black uppercase tracking-widest">Logout</button>
+      <div className="neo-badge bg-[var(--neo-lavender)]">Profil</div>
+      <button onClick={logout} className="neo-badge bg-white !py-1.5">Logout</button>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="neo-card p-4 text-center"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">BMI</div><div className="text-3xl font-black leading-none mt-1">{p.bmi}</div><div className="text-[10px] font-black uppercase mt-1">{p.status_bmi}</div></div>
+      <div className="neo-card p-4 text-center bg-[var(--neo-peach)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">BMR</div><div className="text-3xl font-black leading-none mt-1">{p.bmr}</div><div className="text-[10px] font-black uppercase mt-1">kkal</div></div>
+      <div className="neo-card p-4 text-center bg-[var(--neo-sky)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">TDEE</div><div className="text-3xl font-black leading-none mt-1">{p.tdee}</div><div className="text-[10px] font-black uppercase mt-1">×1.55</div></div>
+      <div className="neo-card p-4 text-center bg-[#0f172a] text-white"><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Target</div><div className="text-3xl font-black leading-none mt-1">{p.target_kalori}</div><div className="text-[10px] font-black uppercase mt-1">kkal/hari</div></div>
     </div>
     <div className="grid grid-cols-2 gap-3">
-      <Card className="!p-4 text-center rounded-[20px]"><div className="text-3xl font-black leading-none">{p.bmi}</div><div className="mt-1 text-[10px] font-black uppercase tracking-widest opacity-60">BMI • {p.status_bmi}</div></Card>
-      <Card className="!p-4 text-center rounded-[20px] bg-[#FFBE0B]"><div className="text-3xl font-black leading-none">{p.bmr}</div><div className="mt-1 text-[10px] font-black uppercase tracking-widest">BMR</div></Card>
-      <Card className="!p-4 text-center rounded-[20px] bg-[#2563eb] text-white"><div className="text-3xl font-black leading-none">{p.tdee}</div><div className="mt-1 text-[10px] font-black uppercase tracking-widest opacity-90">TDEE</div></Card>
-      <Card className="!p-4 text-center rounded-[20px] bg-[#0f172a] text-white"><div className="text-3xl font-black leading-none">{p.target_kalori}</div><div className="mt-1 text-[10px] font-black uppercase tracking-widest opacity-70">Target kkal</div></Card>
+      <div className="neo-card p-4 text-center bg-[#0f172a] text-white"><div className="text-2xl font-black">🔥 {p.current_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></div>
+      <div className="neo-card p-4 text-center"><div className="text-2xl font-black">🏆 {p.longest_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Longest</div></div>
     </div>
-    <div className="grid grid-cols-2 gap-3">
-      <Card className="!p-4 text-center rounded-[20px] bg-[#0f172a] text-white border-[#0f172a]"><div className="text-2xl font-black">🔥 {p.current_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></Card>
-      <Card className="!p-4 text-center rounded-[20px]"><div className="text-2xl font-black">🏆 {p.longest_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Longest</div></Card>
-    </div>
-    <Card className="rounded-[24px]">
-      <h2 className="text-sm font-black uppercase tracking-widest">Edit Profil</h2>
-      <form onSubmit={save} className="mt-3 grid gap-3 sm:grid-cols-2">
-        <div className="sm:col-span-2"><label className="text-[11px] font-black uppercase tracking-widest">Nama</label><Input value={form.nama} onChange={e=>setForm(s=>({...s,nama:e.target.value}))} required/></div>
-        <div><label className="text-[11px] font-black uppercase tracking-widest">Usia</label><Input type="number" value={form.usia} onChange={e=>setForm(s=>({...s,usia:parseInt(e.target.value)||0}))} /></div>
-        <div><label className="text-[11px] font-black uppercase tracking-widest">Gender</label><select className="w-full rounded-[16px] border-[3px] border-[#0f172a] bg-white px-4 py-3 text-sm font-black" value={form.gender} onChange={e=>setForm(s=>({...s,gender:e.target.value}))}><option value="pria">Pria</option><option value="wanita">Wanita</option></select></div>
-        <div><label className="text-[11px] font-black uppercase tracking-widest">BB (kg)</label><Input type="number" step="0.1" value={form.bb} onChange={e=>setForm(s=>({...s,bb:parseFloat(e.target.value)||0}))}/></div>
-        <div><label className="text-[11px] font-black uppercase tracking-widest">TB (cm)</label><Input type="number" value={form.tb} onChange={e=>setForm(s=>({...s,tb:parseInt(e.target.value)||0}))}/></div>
-        <div className="sm:col-span-2"><label className="text-[11px] font-black uppercase tracking-widest">Tujuan</label><select className="w-full rounded-[16px] border-[3px] border-[#0f172a] bg-white px-4 py-3 text-sm font-black" value={form.tujuan} onChange={e=>setForm(s=>({...s,tujuan:e.target.value}))}><option value="turunkan">Turunkan</option><option value="stabilkan">Stabilkan</option><option value="naikkan">Naikkan</option></select></div>
-        {msg && <div className="sm:col-span-2 rounded-[16px] bg-[#0f172a] text-white p-3 text-xs font-black">{msg}</div>}
-        <div className="sm:col-span-2"><Button type="submit" size="lg" disabled={saving}>{saving?"Menyimpan...":"Simpan →"}</Button></div>
+    <div className="neo-card p-6 md:p-8 bg-white">
+      <div className="neo-badge bg-[var(--neo-mint)] inline-block">Edit Profil</div>
+      <h2 className="mt-3 text-xl font-black leading-tight">Perbarui datamu</h2>
+      <form onSubmit={save} className="mt-5 grid gap-4 sm:grid-cols-2">
+        <label className="block sm:col-span-2"><span className="mb-1 block text-xs font-black uppercase tracking-wider">Nama</span><input className="neo-input" value={form.nama} onChange={e=>setForm(s=>({...s,nama:e.target.value}))} required/></label>
+        <label className="block"><span className="mb-1 block text-xs font-black uppercase tracking-wider">Usia</span><input className="neo-input" type="number" value={form.usia} onChange={e=>setForm(s=>({...s,usia:parseInt(e.target.value)||0}))} /></label>
+        <label className="block"><span className="mb-1 block text-xs font-black uppercase tracking-wider">Gender</span>
+          <div className="flex gap-2">
+            <button type="button" onClick={()=>setForm(s=>({...s,gender:"pria"}))} className={`neo-btn flex-1 !p-2 text-xs font-black ${form.gender==="pria"?"!bg-[var(--neo-lavender)]":"bg-white"}`}>Pria</button>
+            <button type="button" onClick={()=>setForm(s=>({...s,gender:"wanita"}))} className={`neo-btn flex-1 !p-2 text-xs font-black ${form.gender==="wanita"?"!bg-[var(--neo-lavender)]":"bg-white"}`}>Wanita</button>
+          </div>
+        </label>
+        <label className="block"><span className="mb-1 block text-xs font-black uppercase tracking-wider">BB (kg)</span><input className="neo-input" type="number" step="0.1" value={form.bb} onChange={e=>setForm(s=>({...s,bb:parseFloat(e.target.value)||0}))}/></label>
+        <label className="block"><span className="mb-1 block text-xs font-black uppercase tracking-wider">TB (cm)</span><input className="neo-input" type="number" value={form.tb} onChange={e=>setForm(s=>({...s,tb:parseInt(e.target.value)||0}))}/></label>
+        <label className="block sm:col-span-2"><span className="mb-1 block text-xs font-black uppercase tracking-wider">Tujuan</span>
+          <div className="grid grid-cols-3 gap-2">
+            {(["stabilkan","turunkan","naikkan"] as const).map(v=>(
+              <button key={v} type="button" onClick={()=>setForm(s=>({...s,tujuan:v}))} className={`neo-btn !py-2.5 text-xs font-black capitalize ${form.tujuan===v?"!bg-[#0f172a] !text-white":"bg-white"}`}>{v}</button>
+            ))}
+          </div>
+        </label>
+        {msg && <div className="sm:col-span-2 neo-card-soft bg-[#0f172a] text-white p-3 text-xs font-black">{msg}</div>}
+        <div className="sm:col-span-2"><button type="submit" disabled={saving} className="neo-btn w-full bg-[var(--primary)] text-white !rounded-full min-h-[56px] text-base">{saving?"Menyimpan...":"Simpan →"}</button></div>
       </form>
-    </Card>
-    <Link href="/foto" className="block"><Button size="lg">Snap Foto →</Button></Link>
+    </div>
+    <Link href="/foto" className="neo-btn flex w-full justify-center bg-[var(--primary)] text-white !rounded-full min-h-[56px]">Snap Foto →</Link>
   </div>;
 }

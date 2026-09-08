@@ -9,24 +9,35 @@ const ITEMS = [
   { href: "/dev", label: "Dev", icon: "⚙️" },
 ];
 export default function BottomNav() {
-  const p = usePathname();
+  const path = usePathname();
+  const isActive = (h: string) => path?.startsWith(h);
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-[3px] border-[#0f172a] px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] flex justify-around items-end md:hidden shadow-[0_-4px_0_#0f172a]">
-      {ITEMS.map(it => {
-        const active = p?.startsWith(it.href);
-        if (it.center) return (
-          <Link key={it.href} href={it.href} className="-mt-8 flex flex-col items-center">
-            <div className="w-16 h-16 rounded-[20px] bg-[#2563eb] text-white border-[3px] border-[#0f172a] shadow-[4px_4px_0px_#0f172a] flex items-center justify-center text-2xl active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">📸</div>
-            <span className="mt-1 text-[10px] font-black uppercase tracking-widest">Snap</span>
-          </Link>
-        );
-        return (
-          <Link key={it.href} href={it.href} className="flex flex-1 flex-col items-center justify-center gap-1 py-1">
-            <span className={`w-10 h-10 rounded-[16px] flex items-center justify-center text-lg border-[3px] ${active ? "bg-[#0f172a] text-white border-[#0f172a]" : "bg-white text-[#0f172a] border-[#0f172a]"}`}>{it.icon}</span>
-            <span className={`text-[10px] font-black uppercase tracking-widest ${active ? "text-[#2563eb]" : "text-[#0f172a]/70"}`}>{it.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+    <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 mx-auto w-full sm:w-[96%] sm:max-w-[560px] z-40 pointer-events-none px-0 sm:px-2">
+      <nav className="pointer-events-auto relative grid w-full items-center h-[70px] sm:h-[66px] grid-cols-5 rounded-none sm:rounded-full border-t-[2.5px] sm:border-[2.5px] border-[#0f172a] bg-white/98 sm:bg-white/95 px-1 sm:px-2 pb-[env(safe-area-inset-bottom)] sm:pb-0 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] sm:shadow-[0_10px_30px_rgba(0,0,0,0.15),4px_4px_0px_#0f172a] backdrop-blur-xl">
+        {ITEMS.map((it) => {
+          if (it.center) {
+            const active = isActive(it.href);
+            return (
+              <div key={it.href} className="relative flex h-full flex-col items-center justify-end pb-1.5">
+                <Link href={it.href} className="-top-6 absolute z-20">
+                  <div className={`flex h-[58px] w-[58px] items-center justify-center rounded-full border-[2.5px] border-[#0f172a] text-white shadow-[0_6px_16px_rgba(37,99,235,0.35),3px_3px_0px_#0f172a] ${active ? "bg-[#0f172a]" : "bg-[var(--primary)]"}`}>
+                    <span className="text-xl">📸</span>
+                  </div>
+                </Link>
+                <span className={`pt-1 text-[9px] uppercase tracking-wider font-black ${active ? "text-[#0f172a]" : "text-slate-500"}`}>Foto</span>
+              </div>
+            );
+          }
+          const active = isActive(it.href);
+          return (
+            <Link key={it.href} href={it.href} className="relative flex flex-col items-center justify-center h-full z-10 w-full py-1">
+              {active && <div className="absolute inset-1 rounded-full bg-[var(--primary)] border-[1.5px] border-[#0f172a] -z-10 shadow-[1px_1px_0px_#0f172a]" />}
+              <span className={`text-[15px] leading-none ${active ? "text-white" : "text-slate-500"}`}>{it.icon}</span>
+              <span className={`text-[9px] font-black uppercase tracking-wider leading-none mt-0.5 ${active ? "text-white" : "text-slate-500"}`}>{it.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

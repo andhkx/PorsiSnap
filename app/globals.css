@@ -1,35 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --hit-primary: #0f172a;
-  --hit-on-primary: #ffffff;
-  --hit-bg: #ffffff;
-  --hit-surface: #2563eb;
-  --hit-border: #0f172a;
-  --hit-text: #0f172a;
-  --hit-accent: #2563eb;
-  --hit-yellow: #ffbe0b;
-  --hit-teal: #00d9a3;
-  --hit-pink: #ff006e;
-  --hit-orange: #ff6b35;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --border: #0f172a;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --neo-border: #0f172a;
+  --neo-yellow: #bae6fd;
+  --neo-mint: #bbf7d0;
+  --neo-peach: #fed7aa;
+  --neo-coral: #fecdd3;
+  --neo-lavender: #e9d5ff;
+  --neo-sky: #bae6fd;
+  --neo-orange: #fdba74;
+  --neo-shadow-sm: 2px 2px 0px 0px #0f172a;
+  --neo-shadow: 4px 4px 0px 0px #0f172a;
+  --neo-shadow-lg: 6px 6px 0px 0px #0f172a;
+  --neo-shadow-inset: inset 2px 2px 0px 0px #0f172a1f;
+  --radius: 1.25rem;
 }
 
 @theme inline {
-  --color-hit-primary: var(--hit-primary);
-  --color-hit-surface: var(--hit-surface);
-  --color-hit-bg: var(--hit-bg);
-  --color-hit-border: var(--hit-border);
-  --color-hit-text: var(--hit-text);
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-border: var(--border);
+  --font-sans: var(--font-jakarta);
+  --font-display: var(--font-space);
+  --radius-lg: var(--radius);
 }
 
-* { border-color: var(--hit-border); }
+* { border-color: var(--border); }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-jakarta), system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--primary); color: white; }
 
-body {
-  background: var(--hit-bg);
-  color: var(--hit-text);
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-::selection { background: var(--hit-surface); color: white; }
+.neo-card,.clay { border: 2.5px solid var(--neo-border); box-shadow: var(--neo-shadow); background: #fffffff5; border-radius: 1.5rem; }
+.neo-card-soft,.clay-soft { border: 2px solid var(--neo-border); box-shadow: var(--neo-shadow-sm); background: #fffffff5; border-radius: 1.25rem; }
+.neo-inset,.clay-inset { border: 2px solid var(--neo-border); box-shadow: var(--neo-shadow-inset); background: #f8fafc; border-radius: 1rem; }
+.neo-btn,.clay-btn { border: 2px solid var(--neo-border); box-shadow: var(--neo-shadow); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; border-radius: 1rem; padding: .75rem 1.25rem; font-weight: 800; transition: transform .12s cubic-bezier(.2,.8,.2,1), box-shadow .12s; }
+.neo-btn:disabled,.clay-btn:disabled { cursor: not-allowed; opacity: .5; box-shadow: var(--neo-shadow-sm); transform: none !important; }
+.neo-btn:hover:not(:disabled),.clay-btn:hover:not(:disabled) { box-shadow: 5px 5px 0 0 var(--neo-border); transform: translate(-1.5px,-1.5px); }
+.neo-btn:active:not(:disabled),.clay-btn:active:not(:disabled) { box-shadow: 1px 1px 0 0 var(--neo-border); transform: translate(2px,2px); }
+.neo-input,.clay-input { border: 2px solid var(--neo-border); box-shadow: var(--neo-shadow-sm); width: 100%; color: var(--foreground); background: #fff; border-radius: 1rem; outline: none; padding: .75rem 1.1rem; font-weight: 700; transition: all .12s; }
+.neo-input:focus,.clay-input:focus { box-shadow: 3px 3px 0 0 var(--primary); border-color: var(--primary); }
+.neo-badge { border: 1.5px solid var(--neo-border); text-transform: uppercase; letter-spacing: .06em; box-shadow: var(--neo-shadow-sm); border-radius: 9999px; padding: .25rem .75rem; font-size: .75rem; font-weight: 800; }

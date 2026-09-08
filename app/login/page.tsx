@@ -2,9 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import Button from "@/components/UI/Button";
-import Input from "@/components/UI/Input";
-import Card from "@/components/UI/Card";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -23,26 +20,33 @@ export default function LoginPage() {
     setLoading(false);
   }
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="border-b-[3px] border-[#0f172a] bg-white px-4 py-3 flex items-center justify-between">
+    <div className="min-h-dvh bg-white flex flex-col">
+      <header className="border-b-[2.5px] border-[#0f172a] bg-white px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-[12px] bg-[#2563eb] border-[3px] border-[#0f172a] flex items-center justify-center text-white font-black shadow-[3px_3px_0px_#0f172a]">P</div>
-          <span className="font-black uppercase tracking-tight">PorsiSnap</span>
+          <div className="w-9 h-9 rounded-xl bg-[var(--primary)] border-2 border-[#0f172a] grid place-items-center text-white font-black shadow-[2px_2px_0px_#0f172a]">P</div>
+          <span className="font-black uppercase tracking-tight text-sm">PorsiSnap</span>
         </Link>
-        <Link href="/register" className="rounded-[9999px] border-[3px] border-[#0f172a] bg-[#FFBE0B] px-4 py-2 text-xs font-black uppercase">Daftar</Link>
+        <Link href="/register" className="neo-badge bg-[var(--neo-mint)] !py-1.5">Daftar</Link>
       </header>
-      <div className="flex-1 flex items-start md:items-center justify-center p-4 pt-6">
-        <Card className="w-full max-w-[420px] rounded-[24px]">
-          <h1 className="text-2xl font-black uppercase tracking-tight">Masuk</h1>
-          <p className="mt-1 text-sm font-bold opacity-60">Masuk untuk lanjut tracking kalori.</p>
-          <form onSubmit={onSubmit} className="mt-5 space-y-3">
-            <div><label className="text-[11px] font-black uppercase tracking-widest">Email</label><Input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="kamu@email.com" /></div>
-            <div><label className="text-[11px] font-black uppercase tracking-widest">Password</label><Input type="password" required value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" /></div>
-            {err && <div className="rounded-[16px] bg-[#ff006e] text-white border-[3px] border-[#0f172a] p-3 text-xs font-black">{err}</div>}
-            <Button type="submit" size="lg" disabled={loading}>{loading?"Memproses...":"Masuk →"}</Button>
+      <div className="flex-1 grid place-items-center p-4">
+        <div className="neo-card w-full max-w-[420px] p-6 md:p-7 bg-white">
+          <div className="neo-badge bg-[var(--neo-lavender)] inline-block">Masuk</div>
+          <h1 className="mt-3 text-2xl font-black leading-tight">Masuk untuk lanjut tracking</h1>
+          <p className="mt-1 text-sm font-medium text-slate-600">HitCal flow — auth Supabase, redirect ke Profil.</p>
+          <form onSubmit={onSubmit} className="mt-5 space-y-4" noValidate>
+            <label className="block">
+              <span className="mb-1 block text-xs font-black uppercase tracking-wider">Email</span>
+              <input className="neo-input" type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="kamu@email.com" />
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-xs font-black uppercase tracking-wider">Password</span>
+              <input className="neo-input" type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" />
+            </label>
+            {err && <div role="alert" className="neo-card-soft bg-[var(--neo-coral)] p-3 text-xs font-black">{err}</div>}
+            <button type="submit" disabled={loading} className="neo-btn w-full bg-[var(--primary)] text-white !rounded-full min-h-[56px] text-base">{loading?"Memproses...":"Masuk →"}</button>
           </form>
-          <div className="mt-4 text-center text-xs font-black">Belum punya akun? <Link href="/register" className="underline decoration-[3px] underline-offset-4">Daftar</Link></div>
-        </Card>
+          <p className="mt-4 text-center text-xs font-bold">Belum punya akun? <Link href="/register" className="font-black underline decoration-2 underline-offset-4">Daftar</Link></p>
+        </div>
       </div>
     </div>
   );

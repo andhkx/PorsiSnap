@@ -2,8 +2,6 @@
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { compressToWebp } from "@/lib/compress";
-import Button from "@/components/UI/Button";
-import Card from "@/components/UI/Card";
 import Link from "next/link";
 type Food = { name: string; calories: number; portion?: string };
 export default function FotoPage(){
@@ -55,35 +53,39 @@ export default function FotoPage(){
     if(k==="name") foods[i].name=v; else foods[i].calories=parseInt(v)||0;
     setResult({...result,foods,total_calories:foods.reduce((a,b)=>a+(b.calories||0),0)});
   }
-  return <div className="mx-auto max-w-[480px] md:max-w-3xl p-4 space-y-4">
+  return <div className="mx-auto max-w-5xl p-4 pb-28 space-y-4">
     <div className="flex items-center justify-between gap-3">
-      <h1 className="text-2xl font-black uppercase tracking-tight">Snap Foto</h1>
-      <Link href="/history" className="rounded-[9999px] border-[3px] border-[#0f172a] bg-white px-4 py-2 text-xs font-black uppercase">Riwayat →</Link>
+      <div className="neo-badge bg-[var(--neo-lavender)]">Snap Foto</div>
+      <Link href="/history" className="neo-badge bg-white">Riwayat →</Link>
     </div>
-    <Card className="rounded-[24px]">
-      <label className="text-[11px] font-black uppercase tracking-widest">Tanggal</label>
-      <input type="date" value={tanggal} onChange={e=>setTanggal(e.target.value)} className="mt-1 w-full rounded-[16px] border-[3px] border-[#0f172a] bg-white px-4 py-3 text-sm font-black" />
-      <div className="mt-3 grid gap-3">
+    <div className="neo-card bg-white p-6">
+      <label className="block"><span className="mb-1 block text-xs font-black uppercase tracking-wider">Tanggal</span>
+        <input type="date" value={tanggal} onChange={e=>setTanggal(e.target.value)} className="neo-input" />
+      </label>
+      <div className="mt-4 grid gap-3">
         <input ref={ref} type="file" accept="image/*" capture="environment" onChange={onFile} className="hidden" />
-        <button onClick={()=>ref.current?.click()} className="w-full rounded-[20px] border-[3px] border-[#0f172a] bg-[#FFBE0B] px-6 py-4 text-sm font-black uppercase tracking-wide shadow-[4px_4px_0px_#0f172a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">📸 Pilih / Foto Makanan</button>
-        {preview && <img src={preview} alt="preview" className="w-full rounded-[20px] border-[3px] border-[#0f172a] max-h-[360px] object-cover" />}
-        <Button onClick={analyze} disabled={!blob||loading} size="lg">{loading?"Menganalisis...":"Analisis dengan Gemini →"}</Button>
+        <button type="button" onClick={()=>ref.current?.click()} className="neo-btn w-full bg-[var(--neo-mint)] !rounded-full min-h-[56px]">📸 Pilih / Foto Makanan</button>
+        {preview && <img src={preview} alt="preview makanan" className="w-full rounded-[1.5rem] border-[2.5px] border-[#0f172a] max-h-[360px] object-cover" />}
+        <button type="button" onClick={analyze} disabled={!blob||loading} className="neo-btn w-full bg-[var(--primary)] text-white !rounded-full min-h-[56px] disabled:opacity-50">{loading?"Menganalisis...":"Analisis dengan Gemini →"}</button>
       </div>
-      {msg && <div className="mt-3 rounded-[16px] bg-[#0f172a] text-white p-3 text-xs font-black">{msg}</div>}
-    </Card>
-    {result && <Card className="rounded-[24px] bg-white">
-      <h2 className="text-sm font-black uppercase tracking-widest">Hasil • {result.total_calories} kkal</h2>
-      {result.notes && <p className="mt-1 text-xs font-bold opacity-60">{result.notes}</p>}
-      <div className="mt-3 space-y-2">
+      {msg && <div role="status" className="mt-3 neo-card-soft bg-[#0f172a] text-white p-3 text-xs font-black">{msg}</div>}
+    </div>
+    {result && <div className="neo-card bg-white p-6">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-sm font-black uppercase tracking-wider">Hasil • {result.total_calories} kkal</h2>
+        <span className="neo-badge bg-[var(--neo-peach)]">{result.foods.length} item</span>
+      </div>
+      {result.notes && <p className="mt-2 text-xs font-semibold text-slate-600">{result.notes}</p>}
+      <div className="mt-4 space-y-2">
         {result.foods.map((f,i)=>(
-          <div key={i} className="flex items-center gap-2 rounded-[16px] border-[3px] border-[#0f172a] bg-[#f8fafc] p-2">
-            <input value={f.name} onChange={e=>edit(i,"name",e.target.value)} className="flex-1 rounded-[12px] border-[3px] border-[#0f172a] bg-white px-3 py-2 text-sm font-black" />
-            <input type="number" value={f.calories} onChange={e=>edit(i,"calories",e.target.value)} className="w-24 rounded-[12px] border-[3px] border-[#0f172a] bg-white px-2 py-2 text-center text-sm font-black" />
-            <span className="text-xs font-black">kkal</span>
+          <div key={i} className="flex items-center gap-2 neo-card-soft !p-2">
+            <input aria-label="nama makanan" value={f.name} onChange={e=>edit(i,"name",e.target.value)} className="neo-input !py-2 flex-1" />
+            <input aria-label="kalori" type="number" value={f.calories} onChange={e=>edit(i,"calories",e.target.value)} className="neo-input !py-2 w-24 text-center" />
+            <span className="text-xs font-black shrink-0">kkal</span>
           </div>
         ))}
       </div>
-      <div className="mt-3"><Button onClick={save} disabled={saving} size="lg">{saving?"Menyimpan...":`Simpan ${result.foods.length} Item → History`}</Button></div>
-    </Card>}
+      <button type="button" onClick={save} disabled={saving} className="neo-btn mt-4 w-full bg-[var(--primary)] text-white !rounded-full min-h-[56px]">{saving?"Menyimpan...":`Simpan ${result.foods.length} Item → History`}</button>
+    </div>}
   </div>;
 }
