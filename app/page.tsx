@@ -80,7 +80,7 @@ export default function Home() {
         <div className="bg-white border-[4px] border-black shadow-[6px_6px_0px_#000] p-6 md:p-8 grid md:grid-cols-2 gap-6 items-center">
           <div>
             <h2 className="font-black uppercase text-2xl">Log Daily Meals • Stay Consistent</h2>
-            <p className="font-semibold text-sm mt-2">Konsistensi > perfeksi. 3 langkah raw & brutalist.</p>
+            <p className="font-semibold text-sm mt-2">Konsistensi &gt; perfeksi. 3 langkah raw &amp; brutalist.</p>
             <div className="mt-4 space-y-3">
               <div className="flex gap-3 border-[3px] border-black p-3 bg-[#F5F5F5]"><span className="bg-black text-white w-7 h-7 flex items-center justify-center font-black shrink-0">1</span><span className="font-bold text-sm">Foto / upload makanan — kompres 800px WebP</span></div>
               <div className="flex gap-3 border-[3px] border-black p-3 bg-[#F5F5F5]"><span className="bg-black text-white w-7 h-7 flex items-center justify-center font-black shrink-0">2</span><span className="font-bold text-sm">Gemini Pro analisis → simpan otomatis + hitung daily_summary</span></div>

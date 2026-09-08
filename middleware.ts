@@ -8,13 +8,17 @@ export async function middleware(req: NextRequest) {
   const supabase = createServerClient(url, key, {
     cookies: {
       getAll() { return req.cookies.getAll(); },
-      setAll(c) { c.forEach(({ name, value, options }) => req.cookies.set(name, value, options)); res = NextResponse.next({ request: { headers: req.headers } }); c.forEach(({ name, value, options }) => res.cookies.set(name, value, options)); },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
+        res = NextResponse.next({ request: { headers: req.headers } });
+        cookiesToSet.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+      },
     },
   });
   const { data: { user } } = await supabase.auth.getUser();
-  const path = req.nextUrl.pathname;
-  const isAuth = path === "/login" || path === "/register";
-  const isApp = path.startsWith("/profil") || path.startsWith("/foto") || path.startsWith("/history") || path.startsWith("/stats") || path.startsWith("/dev");
+  const p = req.nextUrl.pathname;
+  const isAuth = p === "/login" || p === "/register";
+  const isApp = p.startsWith("/profil") || p.startsWith("/foto") || p.startsWith("/history") || p.startsWith("/stats") || p.startsWith("/dev");
   if (!user && isApp) return NextResponse.redirect(new URL("/login", req.url));
   if (user && isAuth) return NextResponse.redirect(new URL("/profil", req.url));
   return res;
