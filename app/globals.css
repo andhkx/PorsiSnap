@@ -1,41 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --nb-black: #000000;
-  --nb-orange: #ff6b35;
-  --nb-blue: #004e89;
-  --nb-yellow: #ffbe0b;
-  --nb-teal: #00d9a3;
-  --nb-pink: #ff006e;
-  --nb-dark: #1a1a1a;
-  --nb-bg: #f5f5f5;
+  --hit-primary: #0f172a;
+  --hit-on-primary: #ffffff;
+  --hit-bg: #ffffff;
+  --hit-surface: #2563eb;
+  --hit-border: #0f172a;
+  --hit-text: #0f172a;
+  --hit-accent: #2563eb;
+  --hit-yellow: #ffbe0b;
+  --hit-teal: #00d9a3;
+  --hit-pink: #ff006e;
+  --hit-orange: #ff6b35;
 }
 
 @theme inline {
-  --color-nb-black: var(--nb-black);
-  --color-nb-orange: var(--nb-orange);
-  --color-nb-blue: var(--nb-blue);
-  --color-nb-yellow: var(--nb-yellow);
-  --color-nb-teal: var(--nb-teal);
-  --color-nb-pink: var(--nb-pink);
-  --color-nb-dark: var(--nb-dark);
-  --color-nb-bg: var(--nb-bg);
-
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  --color-hit-primary: var(--hit-primary);
+  --color-hit-surface: var(--hit-surface);
+  --color-hit-bg: var(--hit-bg);
+  --color-hit-border: var(--hit-border);
+  --color-hit-text: var(--hit-text);
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
+
+* { border-color: var(--hit-border); }
 
 body {
-  background: var(--nb-bg);
-  color: var(--nb-dark);
-  font-family: var(--font-sans);
+  background: var(--hit-bg);
+  color: var(--hit-text);
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-::selection {
-  background: var(--nb-orange);
-  color: var(--nb-black);
-}
-
-@keyframes nb-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+::selection { background: var(--hit-surface); color: white; }
