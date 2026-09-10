@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { CodeXml, Github, Phone, Instagram, Globe, Mail, ExternalLink } from "lucide-react";
+import { CodeXml, Github, Phone, Globe, Mail, ExternalLink, AtSign } from "lucide-react";
 
 export default function DevPage(){
   return <div className="flex min-h-dvh flex-col overflow-x-hidden relative pb-28">
@@ -46,7 +46,7 @@ export default function DevPage(){
 
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="neo-card-soft group flex items-center justify-between p-3.5 bg-white border-2 border-[#0f172a] shadow-[3px_3px_0px_#0f172a] hover:bg-slate-50 transition-colors">
               <span className="flex items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-[1.5px] border-[#0f172a] bg-[var(--neo-coral)] text-[#0f172a] shadow-[1.5px_1.5px_0px_#0f172a]"><Instagram className="h-5 w-5" /></span>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-[1.5px] border-[#0f172a] bg-[var(--neo-coral)] text-[#0f172a] shadow-[1.5px_1.5px_0px_#0f172a]"><AtSign className="h-5 w-5" /></span>
                 <span className="text-left">
                   <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Instagram</span>
                   <span className="font-extrabold text-[#0f172a] text-sm">@porsisnap</span>
