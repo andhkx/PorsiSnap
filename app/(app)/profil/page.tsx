@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { calcAll } from "@/lib/calculations";
 import Link from "next/link";
+import { User, Scale, Ruler, Flame, Award, LogOut, HelpCircle } from "lucide-react";
+
+const fmt = (n: number) => new Intl.NumberFormat("id-ID").format(n);
 
 export default function ProfilPage(){
   const [p,setP]=useState<any>(null); const [loading,setLoading]=useState(true); const [saving,setSaving]=useState(false); const [msg,setMsg]=useState("");
@@ -24,22 +27,83 @@ export default function ProfilPage(){
   }
   async function logout(){ const s=createClient(); await s.auth.signOut(); location.href="/login"; }
   if(loading) return <div className="mx-auto max-w-5xl p-6 font-black">Memuat...</div>;
-  if(!p) return <div className="mx-auto max-w-5xl p-4"><div className="neo-card p-6">Tidak ada profil. {msg}</div></div>;
+  if(!p) return <div className="mx-auto max-w-5xl p-4"><div className="neo-card p-6 bg-white">Tidak ada profil. {msg}</div></div>;
+  const bmiLabel = p.status_bmi==="kurus"?"Kurus":p.status_bmi==="normal"?"Normal (Ideal)":p.status_bmi==="overweight"?"Overweight":"Obesitas";
+  const bmiDesc = p.status_bmi==="normal"?"Berat badan kamu ideal. Pertahankan pola makan seimbang dan aktivitas fisik!":p.status_bmi==="kurus"?"Tambah asupan bergizi seimbang.":p.status_bmi==="overweight"?"Atur porsi & tingkatkan aktivitas harian.":"Konsultasi pola makan sehat.";
+  const bmiBg = p.status_bmi==="normal"?"bg-[var(--neo-mint)]":p.status_bmi==="kurus"?"bg-[var(--neo-peach)]":"bg-[var(--neo-coral)]";
+  const tujuanLabel = p.tujuan==="stabilkan"?"Stabilkan Berat Badan":p.tujuan==="turunkan"?"Turunkan Berat Badan":"Naikkan Berat Badan";
+  const targetExtra = p.target_bb ? ` (Target ${p.target_bb} kg)` : ` (Target ${p.bb} kg)`;
   return <div className="mx-auto max-w-5xl p-4 pb-28 space-y-4">
     <div className="flex items-center justify-between gap-3">
-      <div className="neo-badge bg-[var(--neo-lavender)]">Profil</div>
-      <button onClick={logout} className="neo-badge bg-white !py-1.5">Logout</button>
+      <span className="neo-badge bg-[var(--neo-lavender)] inline-flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Profil</span>
+      <button onClick={logout} className="neo-badge bg-white inline-flex items-center gap-1.5"><LogOut className="h-3.5 w-3.5" /> Logout</button>
     </div>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div className="neo-card p-4 text-center"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">BMI</div><div className="text-3xl font-black leading-none mt-1">{p.bmi}</div><div className="text-[10px] font-black uppercase mt-1">{p.status_bmi}</div></div>
-      <div className="neo-card p-4 text-center bg-[var(--neo-peach)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">BMR</div><div className="text-3xl font-black leading-none mt-1">{p.bmr}</div><div className="text-[10px] font-black uppercase mt-1">kkal</div></div>
-      <div className="neo-card p-4 text-center bg-[var(--neo-sky)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">TDEE</div><div className="text-3xl font-black leading-none mt-1">{p.tdee}</div><div className="text-[10px] font-black uppercase mt-1">×1.55</div></div>
-      <div className="neo-card p-4 text-center bg-[#0f172a] text-white"><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Target</div><div className="text-3xl font-black leading-none mt-1">{p.target_kalori}</div><div className="text-[10px] font-black uppercase mt-1">kkal/hari</div></div>
+
+    <div className="neo-card bg-white p-6 md:p-7">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-xs font-black uppercase tracking-widest">Target Harian</h2>
+        <span className="neo-badge bg-[var(--neo-lavender)] inline-flex items-center gap-1"><Flame className="h-3 w-3" /> {p.current_streak||0} streak</span>
+      </div>
+      <div className="mt-2 flex items-baseline gap-2">
+        <span className="text-4xl md:text-5xl font-black tracking-tight">{fmt(p.target_kalori)}</span>
+        <span className="text-sm font-black">kalori / hari</span>
+      </div>
+      <p className="mt-1 text-xs font-semibold text-slate-600 leading-relaxed">Rekomendasi asupan kalori optimal berdasarkan target tubuhmu.</p>
+
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="neo-card-soft p-4 bg-[var(--muted)]">
+          <div className="text-[11px] font-black uppercase tracking-widest text-slate-500">BMR (Metabolisme Basal)</div>
+          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(p.bmr)}</span><span className="text-xs font-black">kalori</span></div>
+        </div>
+        <div className="neo-card-soft p-4 bg-[var(--primary)] text-white border-[#0f172a]">
+          <div className="text-[11px] font-black uppercase tracking-widest opacity-80">Kebutuhan Normal</div>
+          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(p.tdee)}</span><span className="text-xs font-black">kalori</span></div>
+          <div className="text-[10px] font-bold opacity-70">×1.55 aktivitas</div>
+        </div>
+      </div>
+
+      <div className="mt-5 neo-card-soft p-4 bg-white">
+        <div className="flex items-center gap-2 text-sm font-black"><HelpCircle className="h-4 w-4 text-[var(--primary)]" /> Metode Perhitungan Hitcal</div>
+        <ul className="mt-2 space-y-1.5 text-xs font-semibold text-slate-700">
+          <li className="flex gap-2"><span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-[#0f172a] shrink-0" /> BMR dihitung dengan formula baku Mifflin–St Jeor.</li>
+          <li className="flex gap-2"><span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-[#0f172a] shrink-0" /> Kebutuhan harian disesuaikan faktor aktivitas harian (1.55x).</li>
+          <li className="flex gap-2"><span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-[#0f172a] shrink-0" /> Defisit / Surplus sehat berkisar ±500 kalori per hari.</li>
+        </ul>
+      </div>
     </div>
-    <div className="grid grid-cols-2 gap-3">
-      <div className="neo-card p-4 text-center bg-[#0f172a] text-white"><div className="text-2xl font-black">🔥 {p.current_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></div>
-      <div className="neo-card p-4 text-center"><div className="text-2xl font-black">🏆 {p.longest_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Longest</div></div>
+
+    <div className="neo-card bg-white p-6 md:p-7">
+      <div className="flex items-center gap-2 text-sm font-black"><User className="h-4 w-4 text-[var(--primary)]" /> Profil Pengguna</div>
+      <div className="mt-1 text-lg font-black">{p.nama}</div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="neo-card-soft p-4 bg-[var(--muted)]">
+          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-500"><User className="h-3.5 w-3.5" /> Kondisi</div>
+          <div className="mt-1 text-sm font-black">{p.usia} th · {p.gender==="pria"?"Pria":"Wanita"}</div>
+        </div>
+        <div className="neo-card-soft p-4 bg-[var(--muted)]">
+          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-500"><Ruler className="h-3.5 w-3.5" /> Postur</div>
+          <div className="mt-1 text-sm font-black">{p.bb} kg · {p.tb} cm</div>
+        </div>
+      </div>
+
+      <div className={`mt-3 neo-card-soft p-4 ${bmiBg}`}>
+        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest opacity-70"><Scale className="h-3.5 w-3.5" /> Status BMI (Body Mass Index)</div>
+        <div className="mt-1 flex items-baseline gap-2"><span className="text-lg font-black">{bmiLabel}</span><span className="text-xs font-black">({p.bmi})</span></div>
+        <p className="mt-1 text-xs font-bold leading-relaxed">{bmiDesc}</p>
+      </div>
+
+      <div className="mt-3 neo-card-soft p-4 bg-[var(--neo-lavender)]">
+        <div className="text-[11px] font-black uppercase tracking-widest opacity-70">Tujuan Utama</div>
+        <div className="mt-1 text-sm font-black">{tujuanLabel}{targetExtra}</div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="neo-card-soft p-3 text-center bg-[#0f172a] text-white"><div className="inline-flex items-center gap-1 text-sm font-black"><Flame className="h-4 w-4" /> {p.current_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></div>
+        <div className="neo-card-soft p-3 text-center"><div className="inline-flex items-center gap-1 text-sm font-black"><Award className="h-4 w-4" /> {p.longest_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Longest</div></div>
+      </div>
     </div>
+
     <div className="neo-card p-6 md:p-8 bg-white">
       <div className="neo-badge bg-[var(--neo-mint)] inline-block">Edit Profil</div>
       <h2 className="mt-3 text-xl font-black leading-tight">Perbarui datamu</h2>

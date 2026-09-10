@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { calcAll } from "@/lib/calculations";
 import Link from "next/link";
+import { User, Camera, CodeXml } from "lucide-react";
 
 export default function RegisterPage() {
   const r = useRouter();
@@ -98,9 +99,9 @@ export default function RegisterPage() {
       </div>
       <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 mx-auto w-full sm:w-[92%] sm:max-w-[460px] z-40 pointer-events-none px-0 sm:px-2">
         <nav className="pointer-events-auto grid h-[68px] w-full grid-cols-3 items-center rounded-none sm:rounded-full border-t-[2.5px] sm:border-[2.5px] border-[#0f172a] bg-white/98 px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl">
-          <Link href="/profil" className="flex flex-col items-center"><span>👤</span><span className="text-[9px] font-black uppercase">Profil</span></Link>
-          <div className="flex flex-col items-center"><Link href="/foto" className="-top-7 absolute"><span className="grid h-[58px] w-[58px] place-items-center rounded-full border-[2.5px] border-[#0f172a] bg-[var(--primary)] text-white shadow-[3px_3px_0px_#0f172a]">📸</span></Link><span className="pt-6 text-[9px] font-black uppercase text-slate-500">Foto</span></div>
-          <Link href="/dev" className="flex flex-col items-center"><span>⚙️</span><span className="text-[9px] font-black uppercase">Dev</span></Link>
+          <Link href="/profil" className="flex flex-col items-center"><User className="h-5 w-5" /><span className="text-[9px] font-black uppercase">Profil</span></Link>
+          <div className="flex flex-col items-center"><Link href="/foto" className="-top-7 absolute"><span className="grid h-[58px] w-[58px] place-items-center rounded-full border-[2.5px] border-[#0f172a] bg-[var(--primary)] text-white shadow-[3px_3px_0px_#0f172a]"><Camera className="h-6 w-6" /></span></Link><span className="pt-6 text-[9px] font-black uppercase text-slate-500">Foto</span></div>
+          <Link href="/dev" className="flex flex-col items-center"><CodeXml className="h-5 w-5" /><span className="text-[9px] font-black uppercase">Dev</span></Link>
         </nav>
       </div>
     </div>
