@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400","500","600","700","800","900"], variable: "--font-jakarta" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400","500","600","700","800"], variable: "--font-jakarta" });
 const space = Space_Grotesk({ subsets: ["latin"], weight: ["500","600","700"], variable: "--font-space" });
 
 export const metadata: Metadata = {
