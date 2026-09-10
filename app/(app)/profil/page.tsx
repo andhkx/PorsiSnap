@@ -28,11 +28,18 @@ export default function ProfilPage(){
   async function logout(){ const s=createClient(); await s.auth.signOut(); location.href="/login"; }
   if(loading) return <div className="mx-auto max-w-5xl p-6 font-black">Memuat...</div>;
   if(!p) return <div className="mx-auto max-w-5xl p-4"><div className="neo-card p-6 bg-white">Tidak ada profil. {msg}</div></div>;
-  const bmiLabel = p.status_bmi==="kurus"?"Kurus":p.status_bmi==="normal"?"Normal (Ideal)":p.status_bmi==="overweight"?"Overweight":"Obesitas";
-  const bmiDesc = p.status_bmi==="normal"?"Berat badan kamu ideal. Pertahankan pola makan seimbang dan aktivitas fisik!":p.status_bmi==="kurus"?"Tambah asupan bergizi seimbang.":p.status_bmi==="overweight"?"Atur porsi & tingkatkan aktivitas harian.":"Konsultasi pola makan sehat.";
-  const bmiBg = p.status_bmi==="normal"?"bg-[var(--neo-mint)]":p.status_bmi==="kurus"?"bg-[var(--neo-peach)]":"bg-[var(--neo-coral)]";
+  const fallback = (!p.bmr || !p.tdee || !p.target_kalori) ? calcAll(Number(p.bb||60), Number(p.tb||165), Number(p.usia||25), (p.gender as any)||"pria", (p.tujuan as any)||"stabilkan") : null;
+  const bmrVal = p.bmr ?? fallback?.bmr ?? 0;
+  const tdeeVal = p.tdee ?? fallback?.tdee ?? 0;
+  const targetVal = p.target_kalori ?? fallback?.target_kalori ?? 0;
+  const bmiVal = p.bmi ?? fallback?.bmi ?? 0;
+  const bmiLabel = (p.status_bmi||fallback?.status_bmi)==="kurus"?"Kurus":(p.status_bmi||fallback?.status_bmi)==="normal"?"Normal (Ideal)":(p.status_bmi||fallback?.status_bmi)==="overweight"?"Overweight":"Obesitas";
+  const bmiDesc = (p.status_bmi||fallback?.status_bmi)==="normal"?"Berat badan kamu ideal. Pertahankan pola makan seimbang dan aktivitas fisik!":(p.status_bmi||fallback?.status_bmi)==="kurus"?"Tambah asupan bergizi seimbang.":(p.status_bmi||fallback?.status_bmi)==="overweight"?"Atur porsi & tingkatkan aktivitas harian.":"Konsultasi pola makan sehat.";
+  const bmiBg = (p.status_bmi||fallback?.status_bmi)==="normal"?"bg-[var(--neo-mint)]":(p.status_bmi||fallback?.status_bmi)==="kurus"?"bg-[var(--neo-peach)]":"bg-[var(--neo-coral)]";
   const tujuanLabel = p.tujuan==="stabilkan"?"Stabilkan Berat Badan":p.tujuan==="turunkan"?"Turunkan Berat Badan":"Naikkan Berat Badan";
   const targetExtra = p.target_bb ? ` (Target ${p.target_bb} kg)` : ` (Target ${p.bb} kg)`;
+  const curStreak = p.current_streak ?? 0;
+  const longStreak = p.longest_streak ?? 0;
   return <div className="mx-auto max-w-5xl p-4 pb-28 space-y-4">
     <div className="flex items-center justify-between gap-3">
       <span className="neo-badge bg-[var(--neo-lavender)] inline-flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Profil</span>
@@ -45,20 +52,20 @@ export default function ProfilPage(){
         <span className="neo-badge bg-[var(--neo-lavender)] inline-flex items-center gap-1"><Flame className="h-3 w-3" /> {p.current_streak||0} streak</span>
       </div>
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-4xl md:text-5xl font-black tracking-tight">{fmt(p.target_kalori)}</span>
+        <span className="text-4xl md:text-5xl font-black tracking-tight">{fmt(targetVal)}</span>
         <span className="text-sm font-black">kalori / hari</span>
       </div>
       <p className="mt-1 text-xs font-semibold text-slate-600 leading-relaxed">Rekomendasi asupan kalori optimal berdasarkan target tubuhmu.</p>
 
       <div className="mt-5 grid grid-cols-2 gap-3">
-        <div className="neo-card-soft p-4 bg-[var(--muted)]">
+        <div className="neo-card-soft p-4 bg-[var(--muted)] border-2 border-[#0f172a]">
           <div className="text-[11px] font-black uppercase tracking-widest text-slate-500">BMR (Metabolisme Basal)</div>
-          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(p.bmr)}</span><span className="text-xs font-black">kalori</span></div>
+          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(bmrVal)}</span><span className="text-xs font-black">kalori</span></div>
         </div>
-        <div className="neo-card-soft p-4 bg-[var(--primary)] text-white border-[#0f172a]">
-          <div className="text-[11px] font-black uppercase tracking-widest opacity-80">Kebutuhan Normal</div>
-          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(p.tdee)}</span><span className="text-xs font-black">kalori</span></div>
-          <div className="text-[10px] font-bold opacity-70">×1.55 aktivitas</div>
+        <div className="neo-card-soft p-4 bg-[var(--primary)] text-white border-2 border-[#0f172a]">
+          <div className="text-[11px] font-black uppercase tracking-widest opacity-90">Kebutuhan Normal</div>
+          <div className="mt-1 flex items-baseline gap-1"><span className="text-xl font-black">{fmt(tdeeVal)}</span><span className="text-xs font-black">kalori</span></div>
+          <div className="text-[10px] font-bold opacity-80">×1.55 aktivitas</div>
         </div>
       </div>
 
@@ -89,7 +96,7 @@ export default function ProfilPage(){
 
       <div className={`mt-3 neo-card-soft p-4 ${bmiBg}`}>
         <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest opacity-70"><Scale className="h-3.5 w-3.5" /> Status BMI (Body Mass Index)</div>
-        <div className="mt-1 flex items-baseline gap-2"><span className="text-lg font-black">{bmiLabel}</span><span className="text-xs font-black">({p.bmi})</span></div>
+        <div className="mt-1 flex items-baseline gap-2"><span className="text-lg font-black">{bmiLabel}</span><span className="text-xs font-black">({bmiVal})</span></div>
         <p className="mt-1 text-xs font-bold leading-relaxed">{bmiDesc}</p>
       </div>
 
@@ -98,9 +105,9 @@ export default function ProfilPage(){
         <div className="mt-1 text-sm font-black">{tujuanLabel}{targetExtra}</div>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-3">
-        <div className="neo-card-soft p-3 text-center bg-[#0f172a] text-white"><div className="inline-flex items-center gap-1 text-sm font-black"><Flame className="h-4 w-4" /> {p.current_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></div>
-        <div className="neo-card-soft p-3 text-center"><div className="inline-flex items-center gap-1 text-sm font-black"><Award className="h-4 w-4" /> {p.longest_streak||0}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Longest</div></div>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="neo-card-soft p-3 text-center bg-[#0f172a] text-white"><div className="inline-flex items-center gap-1 text-sm font-black"><Flame className="h-4 w-4" /> {curStreak}</div><div className="text-[10px] font-black uppercase tracking-widest opacity-70">Current Streak</div></div>
+        <div className="neo-card-soft p-3 text-center bg-[var(--neo-mint)]"><div className="inline-flex items-center gap-1 text-sm font-black"><Award className="h-4 w-4" /> {longStreak}</div><div className="text-[10px] font-black uppercase tracking-widest">Longest</div></div>
       </div>
     </div>
 
