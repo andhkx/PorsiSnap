@@ -92,7 +92,7 @@ export default function Home() {
                 <span className="neo-badge bg-[var(--neo-peach)] text-[#0f172a] !text-[10px] inline-flex items-center gap-1"><Flame className="h-3 w-3" /> Streak</span>
               </div>
             </div>
-            <div className="neo-card p-6 bg-[var(--neo-peach)]">
+            <div className="neo-card p-6 bg-[var(--neo-sky)]">
               <div className="flex items-center gap-2 text-base font-black text-[#0f172a]"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#0f172a] text-white"><HelpCircle className="h-3 w-3" /></span><span>Metode Perhitungan PorsiSnap</span></div>
               <ul className="mt-3 space-y-2 text-xs md:text-sm font-semibold text-slate-800">
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#0f172a] shrink-0" /><span>BMR dihitung dengan formula baku Mifflin–St Jeor.</span></li>
@@ -103,7 +103,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="neo-card p-6 md:p-8 h-fit order-2 md:order-1 bg-white">
+          <section className="neo-card p-6 md:p-8 h-fit order-2 md:order-1 bg-[var(--neo-mint)]">
             <div className="neo-badge inline-flex items-center gap-1.5 bg-[var(--neo-mint)] text-[#0f172a] mb-3">Langkah Awal</div>
             <h1 className="text-2xl sm:text-3xl font-black leading-tight text-[#0f172a]">Kenalan dulu, yuk! <br /><span className="text-[var(--primary)]">Biar kalorimu pas.</span></h1>
             <p className="mt-2 text-xs sm:text-sm font-medium text-slate-600">Isi datamu untuk membuka fitur foto makanan & rekomendasi kalori harian yang dipersonalisasi.</p>

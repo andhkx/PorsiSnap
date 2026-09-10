@@ -88,7 +88,7 @@ export default function FotoPage(){
       <Link href="/history" className="neo-badge bg-white">Riwayat →</Link>
     </div>
 
-    <div className="neo-card bg-white p-6">
+    <div className="neo-card bg-[var(--neo-mint)] p-6">
       <label className="block"><span className="mb-1 flex items-center gap-1.5 text-xs font-black uppercase tracking-wider"><Calendar className="h-3.5 w-3.5" /> Tanggal</span>
         <input type="date" value={tanggal} onChange={e=>setTanggal(e.target.value)} className="neo-input" />
       </label>
@@ -140,7 +140,7 @@ export default function FotoPage(){
       {msg && !loading && <div role="status" className="mt-3 neo-card-soft bg-[#0f172a] text-white p-3 text-xs font-black whitespace-pre-wrap break-words">{msg}</div>}
     </div>
 
-    {result && !loading && <div className="neo-card bg-white p-6">
+    {result && !loading && <div className="neo-card bg-[var(--neo-lavender)] p-6">
       <div className="flex items-center justify-between gap-3">
         <h2 className="inline-flex items-center gap-1.5 text-sm font-black uppercase tracking-wider"><Utensils className="h-4 w-4 text-[var(--primary)]" /> Hasil • {result.total_calories} kkal</h2>
         <span className="neo-badge bg-[var(--neo-peach)]">{result.foods.length} item</span>

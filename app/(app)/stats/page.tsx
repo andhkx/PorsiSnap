@@ -38,7 +38,7 @@ export default function StatsPage(){
       <span className="hidden md:inline-flex neo-badge bg-white inline-flex items-center gap-1.5"><CalendarRange className="h-3.5 w-3.5" /> {periode} Hari</span>
     </div>
 
-    <div className="neo-card p-5 bg-white">
+    <div className="neo-card p-5 bg-[var(--neo-sky)]">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest"><TrendingUp className="h-3.5 w-3.5 text-[var(--primary)]" /> Ringkasan • Target {target} kkal</h2>
         <span className="neo-badge bg-[#0f172a] text-white hidden sm:inline-flex">{pct}% vs target</span>
@@ -46,7 +46,7 @@ export default function StatsPage(){
       <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="neo-card-soft !p-3 text-center bg-[var(--neo-mint)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Rata-rata</div><div className="text-2xl font-black leading-none mt-1">{avg}</div><div className="text-[10px] font-black uppercase">kkal</div></div>
         <div className="neo-card-soft !p-3 text-center bg-[var(--neo-lavender)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Total</div><div className="text-2xl font-black leading-none mt-1">{total}</div><div className="text-[10px] font-black uppercase">kkal</div></div>
-        <div className="neo-card-soft !p-3 text-center bg-white"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Hari Aktif</div><div className="text-xl font-black leading-none mt-1">{aktif}/{periode}</div><div className="text-[10px] font-black uppercase">{ok} memenuhi</div></div>
+        <div className="neo-card-soft !p-3 text-center bg-[var(--neo-peach)]"><div className="text-[10px] font-black uppercase tracking-widest opacity-60">Hari Aktif</div><div className="text-xl font-black leading-none mt-1">{aktif}/{periode}</div><div className="text-[10px] font-black uppercase">{ok} memenuhi</div></div>
         <div className="neo-card-soft !p-3 text-center bg-[#0f172a] text-white"><div className="inline-flex items-center gap-1 text-xs font-black"><Flame className="h-3.5 w-3.5" /> {streak}</div><div className="text-[10px] font-black uppercase opacity-60">Streak • Best {longest}</div></div>
       </div>
       <div className="mt-3 flex gap-2">
@@ -56,7 +56,7 @@ export default function StatsPage(){
     </div>
 
     <div className="grid gap-4 md:grid-cols-2">
-      <div className="neo-card bg-white p-5">
+      <div className="neo-card bg-[var(--neo-lavender)] p-5">
         <h3 className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest"><TrendingUp className="h-3.5 w-3.5" /> Grafik Harian</h3>
         <div className="mt-3 h-[220px] neo-inset !p-2 bg-white overflow-hidden">
           {loading? <div className="grid h-full place-items-center text-sm font-black">Memuat...</div> : (
@@ -72,7 +72,7 @@ export default function StatsPage(){
           )}
         </div>
       </div>
-      <div className="neo-card bg-white p-5">
+      <div className="neo-card bg-[var(--neo-peach)] p-5">
         <h3 className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest"><BarChart3 className="h-3.5 w-3.5" /> Bar Harian • {ok}/{periode} memenuhi</h3>
         <div className="mt-3 h-[220px] neo-inset !p-2 bg-white overflow-hidden">
           <ResponsiveContainer width="100%" height="100%">

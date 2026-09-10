@@ -82,7 +82,7 @@ export default function ProfilPage(){
         </div>
       </div>
 
-      <div className="mt-5 neo-card-soft p-4 bg-white">
+      <div className="mt-5 neo-card-soft p-4 bg-[var(--neo-sky)]">
         <div className="flex items-center gap-2 text-sm font-black"><HelpCircle className="h-4 w-4 text-[var(--primary)]" /> Metode Perhitungan Hitcal</div>
         <ul className="mt-2 space-y-1.5 text-xs font-semibold text-slate-700">
           <li className="flex gap-2"><span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-[#0f172a] shrink-0" /> BMR dihitung dengan formula baku Mifflin–St Jeor.</li>
@@ -98,12 +98,12 @@ export default function ProfilPage(){
       <div className="mt-1 text-lg font-black">{p.nama}</div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <div className="neo-card-soft p-4 bg-white">
-          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-500"><User className="h-3.5 w-3.5" /> Kondisi</div>
+        <div className="neo-card-soft p-4 bg-[var(--neo-mint)]">
+          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-600"><User className="h-3.5 w-3.5" /> Kondisi</div>
           <div className="mt-1 text-sm font-black">{p.usia} th · {p.gender==="pria"?"Pria":"Wanita"}</div>
         </div>
-        <div className="neo-card-soft p-4 bg-white">
-          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-500"><Ruler className="h-3.5 w-3.5" /> Postur</div>
+        <div className="neo-card-soft p-4 bg-[var(--neo-lavender)]">
+          <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-slate-600"><Ruler className="h-3.5 w-3.5" /> Postur</div>
           <div className="mt-1 text-sm font-black">{p.bb} kg · {p.tb} cm</div>
         </div>
       </div>
