@@ -35,7 +35,7 @@ HANYA balas JSON valid tanpa markdown/code fence:
 {"foods":[{"name":"nama makanan","calories":250,"portion":"1 piring"}],"total_calories":350,"notes":"catatan singkat"}
 Aturan: porsi standar Indonesia, konservatif jangan underestimate, calories integer >0.`;
 
-    const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"];
+    const models = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
     let lastErr: any = null;
     let lastStatus = 500;
     let lastRaw: any = null;
